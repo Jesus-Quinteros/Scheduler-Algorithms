@@ -41,6 +41,7 @@ int main() {
   scheduler.RR(3);
   // scheduler.showAnimatedGanttDiagram();
   scheduler.displayAnimatedGanttDiagram();
+  scheduler.displayStepByStepGanttDiagram();
 
   return 0;
 }

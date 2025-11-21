@@ -90,6 +90,7 @@ class Scheduler {
     void showGanttDiagram();
     void showAnimatedGanttDiagram(int milliseconds = 150);
     void displayAnimatedGanttDiagram(int milliseconds = 150);
+    void displayStepByStepGanttDiagram();
 };
 
 void showPresentation();
