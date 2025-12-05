@@ -6,15 +6,16 @@ void Scheduler::displayProcessTable(int startX, int startY, int fontSize) {
     int center = 10;
 
     // Línea separadora
-    DrawLine(startX, startY - 30 + fontSize, startX + 450, startY - 30 + fontSize, BLACK);
+    DrawLine(startX, startY - 30 + fontSize, startX + 630, startY - 30 + fontSize, BLACK);
 
     // Encabezados
     DrawText("Processes", startX + center, startY, fontSize, BLACK);
     DrawText("Burst_Time", startX + 150 + center, startY, fontSize, BLACK);
     DrawText("Arrival_Time", startX + 300 + center, startY, fontSize, BLACK);
+    DrawText("Completion_Time", startX + 450 + center, startY, fontSize, BLACK);
 
     // Línea separadora
-    DrawLine(startX, startY + fontSize + 5, startX + 450, startY + fontSize + 5, BLACK);
+    DrawLine(startX, startY + fontSize + 5, startX + 630, startY + fontSize + 5, BLACK);
 
     // Filas
     for (int i = 0; i < processNames.size(); i++) {
@@ -24,23 +25,27 @@ void Scheduler::displayProcessTable(int startX, int startY, int fontSize) {
         DrawText(processNames[i].c_str(), startX + center * 6, rowY, fontSize, BLACK);
 
         // Burst time
-        DrawText(TextFormat("%d", processes[i].burstTime),
+        DrawText(TextFormat("%d", processes[i].originalBurstTime),
                  startX + 150 + center * 7, rowY, fontSize, BLACK);
 
         // Arrival time
         DrawText(TextFormat("%d", arrivalTimes[i]),
                  startX + 300 + center * 7, rowY, fontSize, BLACK);
+        // Completion time
+        DrawText(TextFormat("%d", processes[i].completionTime),
+                 startX + 450 + center * 7, rowY, fontSize, BLACK);
     }
 
     // Línea inferior
     DrawLine(startX, startY + (processNames.size() + 2) * (fontSize + 5),
-             startX + 450, startY + (processNames.size() + 2) * (fontSize + 5), BLACK);
+             startX + 630, startY + (processNames.size() + 2) * (fontSize + 5), BLACK);
 
     // Separadores verticales
     DrawLine(startX, startY - 30 + fontSize, startX, startY + (processNames.size() + 2) * (fontSize + 5), BLACK);
     DrawLine(startX + 150, startY - 30 + fontSize, startX + 150, startY + (processNames.size() + 2) * (fontSize + 5), BLACK);
     DrawLine(startX + 300, startY - 30 + fontSize, startX + 300, startY + (processNames.size() + 2) * (fontSize + 5), BLACK);
     DrawLine(startX + 450, startY - 30 + fontSize, startX + 450, startY + (processNames.size() + 2) * (fontSize + 5), BLACK);
+    DrawLine(startX + 630, startY - 30 + fontSize, startX + 630, startY + (processNames.size() + 2) * (fontSize + 5), BLACK);
 }
 
 void Scheduler::displayAnimatedGanttDiagram(int milliseconds) {

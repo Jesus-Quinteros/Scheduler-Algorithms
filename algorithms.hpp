@@ -11,7 +11,9 @@ class Process {
   private:
     string name;
     int burstTime;
+     int originalBurstTime;
     int arrivalTime = -1;
+    int completionTime = -1;
     vector<string> processLine;
     ProcessState processState = NEW;
 
@@ -29,33 +31,36 @@ class Process {
     Process(int burstTime);
     Process(string name, int burstTime);
     ~Process() {}
+    int getCompletionTime() const { return completionTime; }
+    
 };
 
 class FIFO {
   private:
     int timeCurrent;
-    void init(vector<Process> processes, vector<int> arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process CPU);
+    void init(vector<Process>& processes, vector<int>& arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process& CPU);
     friend class Scheduler;
 };
 
 class SJF {
   private:
     int timeCurrent;
-    void init(vector<Process> processes, vector<int> arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process CPU);
+    void init(vector<Process>& processes, vector<int>& arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process& CPU);
     friend class Scheduler;
 };
 
 class SRTF {
   private:
     int timeCurrent;
-    void init(vector<Process> processes, vector<int> arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process CPU);
+    void init(vector<Process>& processes, vector<int>& arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process& CPU);
     friend class Scheduler;
 };
 
 class RR {
   private:
     int timeCurrent;
-    void init(vector<Process> processes, vector<int> arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process CPU, int quantum);
+    /*void init(vector<Process> processes, vector<int> arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process CPU, int quantum);*/
+    void init(vector<Process>& processes, vector<int>& arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process& CPU, int quantum);
     friend class Scheduler;
 };
 
@@ -71,6 +76,7 @@ class Scheduler {
 
     vector<Process> processes;
     vector<int> arrivalTimes;
+    vector<int> completionTimes;
     int totalTime;
     vector<vector<string>> processesLines;
     vector<string> processNames;
@@ -94,4 +100,3 @@ class Scheduler {
 };
 
 void showPresentation();
-

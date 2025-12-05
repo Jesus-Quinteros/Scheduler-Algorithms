@@ -1,4 +1,4 @@
-#include "algorithms.hpp"
+  #include "algorithms.hpp"
 #include <iostream>
 #include <queue>
 #include <thread>
@@ -14,7 +14,9 @@ Process::Process(int burstTime) {
     exit(EXIT_FAILURE);
   }
   name = "NONE";
-  burstTime = burstTime;
+  this->burstTime = burstTime;
+  this->originalBurstTime = burstTime;
+  
 }
 
 Process::Process(string name, int burstTime) {
@@ -31,6 +33,8 @@ Process::Process(string name, int burstTime) {
   }
   this->name = name;
   this->burstTime = burstTime;
+  this->originalBurstTime = burstTime;
+  
 }
 
 Scheduler::Scheduler(vector<Process>& processes, vector<int>& arrivalTimes) {
@@ -69,7 +73,7 @@ struct CompareBurstTime {
   }
 };
 
-void FIFO::init(vector<Process> processes, vector<int> arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process CPU) {
+void FIFO::init(vector<Process>& processes, vector<int>& arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process& CPU){
   timeCurrent = 0;
   bool terminateAlgorithm = false;
   queue<int> readyQueue;
@@ -132,7 +136,7 @@ void FIFO::init(vector<Process> processes, vector<int> arrivalTimes, int& totalT
     processesLines[i] = processes[i].processLine;
 }
 
-void SJF::init(vector<Process> processes, vector<int> arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process CPU) {
+void SJF::init(vector<Process>& processes, vector<int>& arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process& CPU) {
   timeCurrent = 0;
   bool terminateAlgorithm = false;
   priority_queue<int, vector<int>, CompareBurstTime> readyQueue((CompareBurstTime(&processes, &arrivalTimes)));
@@ -195,7 +199,7 @@ void SJF::init(vector<Process> processes, vector<int> arrivalTimes, int& totalTi
     processesLines[i] = processes[i].processLine;
 }
 
-void SRTF::init(vector<Process> processes, vector<int> arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process CPU) {
+void SRTF::init(vector<Process>& processes, vector<int>& arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process& CPU) {
   timeCurrent = 0;
   bool terminateAlgorithm = false;
   priority_queue<int, vector<int>, CompareBurstTime> readyQueue((CompareBurstTime(&processes, &arrivalTimes)));
@@ -264,7 +268,8 @@ void SRTF::init(vector<Process> processes, vector<int> arrivalTimes, int& totalT
     processesLines[i] = processes[i].processLine;
 }
 
-void RR::init(vector<Process> processes, vector<int> arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process CPU, int quantum) {
+/*void RR::init(vector<Process> processes, vector<int> arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process CPU, int quantum) {*/
+void RR::init(vector<Process>& processes, vector<int>& arrivalTimes, int& totalTime, vector<vector<string>>& processesLines, vector<string>& processNames, Process& CPU, int quantum) {
   timeCurrent = 0;
   bool terminateAlgorithm = false;
   queue<int> readyQueue;
@@ -293,7 +298,8 @@ void RR::init(vector<Process> processes, vector<int> arrivalTimes, int& totalTim
       readyQueue.pop();
     }
 
-    for (Process& p : processes) {
+    for (int i = 0; i < processes.size(); i++) {
+      Process& p = processes[i];
       if (p.processState != RUNNING && p.arrivalTime != -1)
         p.processLine.push_back("X ");
       else if (p.processState != RUNNING)
@@ -314,6 +320,8 @@ void RR::init(vector<Process> processes, vector<int> arrivalTimes, int& totalTim
     }
     if (CPU.processState == RUNNING && CPU.burstTime == 0) {
       CPU.processState = FINISHED;
+      if (processes[idx].completionTime == -1)
+          processes[idx].completionTime = timeCurrent;
       q = quantum;
     }
 
@@ -350,9 +358,9 @@ void Scheduler::showProcessTable() {
       lengthClassic = false;
   }
 
-  cout << "\t_________________________________________" << endl;
-  cout << "\t| Processes | Burst_Time | Arrival_Time |\n";
-  cout << "\t|___________|____________|______________|" << endl;
+  cout << "\t__________________________________________________________" << endl;
+  cout << "\t| Processes | Burst_Time | Arrival_Time | Completion Time|\n";
+  cout << "\t|___________|____________|______________|________________|" << endl;
 
   for (int i = 0; i < processNames.size(); i++) {
     if (lengthClassic == false) {
@@ -363,7 +371,8 @@ void Scheduler::showProcessTable() {
       if (processNames[i].length() == 1)
         cout << "\t|     " << processNames[i] << "     |";
       else
-        cout << "\t|     " << processNames[i] << "    |";
+        cout << "\t|     " << processNames[i] << "    |";  
+      
     }
     
     if (processes[i].burstTime < 10)
@@ -374,10 +383,15 @@ void Scheduler::showProcessTable() {
       cout << "       " << arrivalTimes[i] << "      |";
     else
       cout << "      " << arrivalTimes[i] << "      |";
+    if (processes[i].completionTime < 10)
+      cout << "       " << processes[i].completionTime << "       |";
+    else
+      cout << "      " << processes[i].completionTime << "       |";
+  
     cout << endl;
   }
 
-  cout << "\t|___________|____________|______________|" << endl;
+  cout << "\t|___________|____________|______________|________________|" << endl;
   cout << endl;
 }
 
@@ -490,4 +504,3 @@ void showPresentation() {
   cout << "\t|\tPlanificador de procesos\t|" << endl;
   cout << "\t|_______________________________________|\n" << endl;
 }
-
