@@ -358,9 +358,9 @@ void Scheduler::showProcessTable() {
       lengthClassic = false;
   }
 
-  cout << "\t___________________________________________________________________________" << endl;
-  cout << "\t| Processes | Burst_Time | Arrival_Time | Completion_Time| Turnaround_Time |\n";
-  cout << "\t|___________|____________|______________|________________|_________________|" << endl;
+  cout << "\t___________________________________________________________________________________________" << endl;
+  cout << "\t| Processes | Burst_Time | Arrival_Time | Completion_Time| Turnaround_Time | Waiting_Time | \n";
+  cout << "\t|___________|____________|______________|________________|_________________|______________|" << endl;
 
   for (int i = 0; i < processNames.size(); i++) {
     if (lengthClassic == false) {
@@ -393,10 +393,17 @@ void Scheduler::showProcessTable() {
         cout << "        " << tat << "       |";
     else
         cout << "       " << tat << "       |";
+
+    int wt = tat - processes[i].originalBurstTime;
+    if (wt < 10)
+        cout << "      " << wt << "      |";
+    else
+        cout << "     " << wt << "     |";
+  
     cout << endl;
   }
 
-  cout << "\t|___________|____________|______________|________________|_________________|" << endl;
+  cout << "\t|___________|____________|______________|________________|_________________|______________|" << endl;
   cout << endl;
 }
 

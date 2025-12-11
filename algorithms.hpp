@@ -11,7 +11,7 @@ class Process {
   private:
     string name;
     int burstTime;
-     int originalBurstTime;
+    int originalBurstTime;
     int arrivalTime = -1;
     int completionTime = -1;
     vector<string> processLine;
