@@ -116,7 +116,10 @@ void FIFO::init(vector<Process>& processes, vector<int>& arrivalTimes, int& tota
       CPU.processState = FINISHED;
 
     for (Process& p : processes) {
-      if (p.burstTime == 0) p.processState = FINISHED;
+      if (p.burstTime == 0) {
+        p.processState = FINISHED;
+        if (p.completionTime == -1) p.completionTime = timeCurrent + 1;
+      }
     }
 
     timeCurrent++;
@@ -179,7 +182,10 @@ void SJF::init(vector<Process>& processes, vector<int>& arrivalTimes, int& total
       CPU.processState = FINISHED;
 
     for (Process& p : processes) {
-      if (p.burstTime == 0) p.processState = FINISHED;
+      if (p.burstTime == 0) {
+        p.processState = FINISHED;
+        if (p.completionTime == -1) p.completionTime = timeCurrent + 1;
+      }
     }
 
     timeCurrent++;
@@ -248,7 +254,10 @@ void SRTF::init(vector<Process>& processes, vector<int>& arrivalTimes, int& tota
       CPU.processState = FINISHED;
 
     for (Process& p : processes) {
-      if (p.burstTime == 0) p.processState = FINISHED;
+      if (p.burstTime == 0) {
+        p.processState = FINISHED;
+        if (p.completionTime == -1) p.completionTime = timeCurrent + 1;
+      }
     }
 
     timeCurrent++;
@@ -321,12 +330,15 @@ void RR::init(vector<Process>& processes, vector<int>& arrivalTimes, int& totalT
     if (CPU.processState == RUNNING && CPU.burstTime == 0) {
       CPU.processState = FINISHED;
       if (processes[idx].completionTime == -1)
-          processes[idx].completionTime = timeCurrent;
+          processes[idx].completionTime = timeCurrent + 1;
       q = quantum;
     }
 
     for (Process& p : processes) {
-      if (p.burstTime == 0) p.processState = FINISHED;
+      if (p.burstTime == 0) {
+        p.processState = FINISHED;
+        if (p.completionTime == -1) p.completionTime = timeCurrent + 1;
+      }
     }
 
     timeCurrent++;
